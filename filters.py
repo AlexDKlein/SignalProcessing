@@ -31,6 +31,7 @@ class BandPassFilter(SignalFilter):
         else:
             return np.fft.ifft(ft, n=X.shape[-1])
 
+
 class MultiBandFilter(SignalFilter):
     def __init__(self, *bands):
         self.bands = bands
@@ -45,4 +46,29 @@ class MultiBandFilter(SignalFilter):
             return np.fft.irfft(ft, n=X.shape[-1])
         else:
             return np.fft.ifft(ft, n=X.shape[-1])
+   
     
+class LowPassFilter(SignalFilter):
+    def __init__(self, cutoff):
+        self.cutoff = cutoff
+
+    def apply(self, X, t=1.0):
+        ft, freqs = self.transform(X, t)
+        ft = np.where(freqs > self.cutoff, ft, 0)
+        if np.isreal(X).all():
+            return np.fft.irfft(ft, n=X.shape[-1])
+        else:
+            return np.fft.ifft(ft, n=X.shape[-1])
+
+
+class HighPassFilter(SignalFilter):
+    def __init__(self, cutoff):
+        self.cutoff = cutoff
+    
+    def apply(self, X, t=1.0):
+        ft, freqs = self.transform(X, t)
+        ft = np.where(freqs < self.cutoff, ft, 0)
+        if np.isreal(X).all():
+            return np.fft.irfft(ft, n=X.shape[-1])
+        else:
+            return np.fft.ifft(ft, n=X.shape[-1])
