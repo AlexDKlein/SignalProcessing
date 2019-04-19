@@ -56,7 +56,7 @@ class LowPassFilter(SignalFilter):
 
     def apply(self, X, t=1.0):
         ft, freqs = self.transform(X, t)
-        ft = np.where(freqs > self.cutoff, ft, 0)
+        ft = np.where(freqs < self.cutoff, ft, 0)
         if np.isreal(X).all():
             return np.fft.irfft(ft, n=X.shape[-1])
         else:
@@ -69,7 +69,7 @@ class HighPassFilter(SignalFilter):
     
     def apply(self, X, t=1.0):
         ft, freqs = self.transform(X, t)
-        ft = np.where(freqs < self.cutoff, ft, 0)
+        ft = np.where(freqs > self.cutoff, ft, 0)
         if np.isreal(X).all():
             return np.fft.irfft(ft, n=X.shape[-1])
         else:
