@@ -3,6 +3,8 @@ import scipy
 
 class SignalFilter():
     def transform(self, X, t=1.0):
+        if np.iterable(t):
+            t = np.ptp(t, axis=-1).mean()
         d = t / (X.shape[-1])
         if np.isreal(X).all():
             X_transformed = np.fft.rfft(X)
