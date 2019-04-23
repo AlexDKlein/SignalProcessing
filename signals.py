@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.signal
-from util import chunk, pad_axis
+from .util import chunk, pad_axis
+
 
 def sampling_rate(a, t=None):
     """
