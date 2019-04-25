@@ -75,5 +75,5 @@ def stft(a, nperseg=256, noverlap=None, window='hann', center=False, pad=True, n
     
     output = np.fft.rfft(segments, norm='ortho' if norm else None)
     
-    return np.swapaxes(output / sum(window), 0, 1)
+    return np.moveaxis(output / sum(window), axis, 0)
     
