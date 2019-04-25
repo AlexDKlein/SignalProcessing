@@ -2,7 +2,12 @@ import numpy as np
 import scipy.signal
 from .util import chunk, pad_axis
 
-
+def nyquist_frequency(X, t=1.0):
+    if np.iterable(t):
+        t = np.ptp(t, axis=-1).mean()
+    sampling_rate = (X.shape[-1]) / t
+    return sampling_rate / 2
+    
 def sampling_rate(a, t=None):
     """
         Return the mean sampling rate for a group of time-series measurements.
@@ -50,7 +55,7 @@ def stft(a, nperseg=256, noverlap=None, window='hann', center=False, pad=True, n
         Returns
         ==========
         output: np.ndarray
-            The transformed array. The `axis` axis corresponds to the segment times.
+            The transformed array. The first axis corresponds to the segment times.
     """
     if noverlap is None:
         noverlap = nperseg // 2
@@ -70,5 +75,5 @@ def stft(a, nperseg=256, noverlap=None, window='hann', center=False, pad=True, n
     
     output = np.fft.rfft(segments, norm='ortho' if norm else None)
     
-    return output / sum(window)
+    return np.swapaxes(output / sum(window), 0, 1)
     
