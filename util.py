@@ -43,8 +43,9 @@ def chunk(a, nperseg, noverlap=None, axis=-1, copy=False, pad=False):
         noverlap: int or None, default=None
             The number of shared items in adjacent segments. 
             If None, defaults to `nperseg // 2`
-        axis: int, default=-1
-            The axis to segmentize
+        axis: int or None, default=-1
+            The axis to segmentize. 
+            If axis is None, the flattened array is used.
         copy: bool, default=True
             If True, return a mutable copy of the array.
         pad: bool, default=False
@@ -77,7 +78,10 @@ def chunk(a, nperseg, noverlap=None, axis=-1, copy=False, pad=False):
                   [[2],
                    [3]]])
     """
-    if axis < 0:
+    if axis is None:
+        a = np.ravel(a)
+        axis = 0
+    elif axis < 0:
         axis += np.ndim(a)
     a = np.asanyarray(a)
     if noverlap is None:
@@ -138,3 +142,22 @@ def slice_axis(a, axis, start=None, stop=None, step=None):
             The sliced array
     """
     return a[tuple(slice(None) if i != axis else slice(start, stop, step) for i in range(np.ndim(a)))]
+
+def mask_axis(a, axis, mask):
+    """
+        Slice an array along a specified axis.
+        Parameters
+        ===========
+        a: np.ndarray
+            Array to slice
+        axis: int
+            The axis along which to apply the mask
+        mask: np.ndarray
+            Boolean mask to apply along the axis
+        
+        Returns
+        ==========
+        output: np.ndarray
+            The masked array
+    """
+    return a[tuple(slice(None) if i != axis else mask for i in range(np.ndim(a)))]
