@@ -1,4 +1,5 @@
 import numpy as np
+import scipy
 import scipy.signal
 from .util import chunk, pad_axis
 
@@ -77,3 +78,35 @@ def stft(a, nperseg=256, noverlap=None, window='hann', center=False, pad=True, n
     
     return np.moveaxis(output / sum(window), axis if axis >= 0 else axis - 1, 0)
     
+def dft(a, axis=-1, real=True, norm=False, window='hann'):
+    """Perform a windowed discrete Fourier Transform along the specified axis.
+    Equivelent to np.fft.rfft if window is None.
+
+    Parameters
+    ============
+    a: array-like
+        Array of time-series measurements
+    axis: int, default=-1
+        The axis along which the fourier transform is applied
+    real: bool, default=True
+        Whether to use the real-valued fourier transform.
+    norm: bool, default=False
+        Whether to apply the 'ortho' norm.
+    window: str or None, default='hann'
+        The specified window, if any, to use during the transform
+    
+    Returns
+    ==========
+    output: np.ndarray
+        The transformed array.
+    """
+    if window is None:
+        window = np.ones(a.shape[axis], dtype=a.dtype)
+    elif window == 'hann':
+        window = np.hanning(a.shape[axis] + 1)[:-1]
+    else:
+        window = scipy.signal.get_window(window, a.shape[axis])
+    a = a * window
+    ft_func = np.fft.rfft if real else np.dual.fft
+    output = ft_func(a, norm='ortho' if norm else None)
+    return output / sum(window)
