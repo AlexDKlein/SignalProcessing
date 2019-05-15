@@ -108,5 +108,19 @@ def dft(a, axis=-1, real=True, norm=False, window='hann'):
         window = scipy.signal.get_window(window, a.shape[axis])
     a = a * window
     ft_func = np.fft.rfft if real else np.dual.fft
-    output = ft_func(a, norm='ortho' if norm else None)
+    output = ft_func(a, norm='ortho' if norm else None) if real else ft_func(a)
     return output / sum(window)
+
+def dftinv(a, axis=-1, real=True, norm=False, window='hann'):
+    output_shape = (a.shape[axis] - 1) * 2 if real else a.shape
+    if window is None:
+        window = np.ones(output_shape, dtype='d')
+    elif window == 'hann':
+        window = np.hanning(output_shape + 1)[:-1]
+    else:
+        window = scipy.signal.get_window(window, output_shape)
+    a = a * sum(window)
+    ftinv_func = np.fft.irfft if real else np.dual.ifft
+    output = ftinv_func(a, axis=axis, norm='ortho' if norm else None) if real else ftinv_func(a, axis=axis)
+    output = np.round(output / window, 4)
+    return output
