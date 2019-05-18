@@ -141,6 +141,8 @@ def slice_axis(a, axis, start=None, stop=None, step=None):
         output: np.ndarray
             The sliced array
     """
+    if axis < 0:
+        axis += np.ndim(a)
     return a[tuple(slice(None) if i != axis else slice(start, stop, step) for i in range(np.ndim(a)))]
 
 def mask_axis(a, axis, mask):
