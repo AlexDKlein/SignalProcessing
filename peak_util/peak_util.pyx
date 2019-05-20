@@ -5,7 +5,8 @@ import numpy as np
 @cython.wraparound(False)
 @cython.boundscheck(False)
 def local_maxima_1d(np.ndarray[dtype=double, ndim=1] x):
-    """
+    """local_maxima_1d(x)
+
         Find all local maxima in a one-dimensional signal.
     
         Parameters
@@ -94,7 +95,8 @@ cdef prominence(double[:] x, long[:] peaks):
     return output, bases[:, 0], bases[:, 1]
 
 def peak_prominence(x, i=None):
-    """
+    """peak_prominence(x, i=None)
+
         Return the prominence of peaks in an input signal x.
 
         Parameters
@@ -119,7 +121,8 @@ def peak_prominence(x, i=None):
 @cython.wraparound(False)
 @cython.boundscheck(False)
 def argpeaks(np.ndarray[double, ndim=1, cast=True] x, long min_distance=0, long n=-1):
-    """
+    """argpeaks(x, min_distance=0, n=-1)
+
     Find the position of peaks in an array x. 
     If min_distance > 0, peaks will be no closer than min_distance apart with the most highest peaks given priority.
     
@@ -165,7 +168,8 @@ def argpeaks(np.ndarray[double, ndim=1, cast=True] x, long min_distance=0, long 
 @cython.wraparound(False)
 @cython.boundscheck(False)
 def peak_width(double[:] x, long[:] peaks, double rel_height=0.5):
-    """
+    """peak_width(x, peaks, rel_height=0.5)
+    
         Return the widths of peaks in a signal. By default, this is the
         full-width at half-prominence.
 
