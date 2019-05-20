@@ -1,3 +1,3 @@
 from .fourier import dft, dftinv, stft
-from util import chunk, restride, pad_axis, mask_axis
-import filters
+from .util import chunk, restride, pad_axis, mask_axis
+import SignalProcessing.filters as filters
