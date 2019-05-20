@@ -119,6 +119,24 @@ def dft(a, axis=-1, real=True, detrend=True, norm=False, window='hann'):
     return output / sum(window)
 
 def dftinv(a, axis=-1, real=True, norm=False, window='hann'):
+    """Perform an inverse windowed discrete Fourier Transform.
+
+    Parameters
+    ===========
+    a: array-like
+        Array of frequency-domain measurements.
+    axis: int, default=-1
+        The axis along which the inverse fourier transform is applied.
+    real: bool, default=True
+        Whether to use the real-valued inverse fourier transform.
+    window: str or None, default='hann'
+        The specified window, if any, to use during the transform
+
+    Returns
+    =========
+    output: np.ndarray
+        The transformed array.
+    """
     output_shape = (a.shape[axis] - 1) * 2 if real else a.shape
     if window is None:
         window = np.ones(output_shape, dtype='d')
