@@ -115,6 +115,8 @@ def restride(a, n, axis=-1):
         output: np.ndarray
             Immutable view of `a`. 
     """
+    if not isinstance(a, np.ndarray) or not np.ndim(a):
+        raise ValueError(f'Argument `a` must be an np.ndarray object with non-zero dimension.')
     while axis < 0:
         axis += np.ndim(a)
     shape = [*a.shape[:axis], a.shape[axis] - n + 1, n, *a.shape[axis+1:]]
